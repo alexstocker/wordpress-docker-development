@@ -1,0 +1,43 @@
+{
+  "name": "alexstocker/wordpress-docker-development",
+  "description": "Wordpress Docker development environment",
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "wordpress/wordpress",
+        "version": "6.6.2",
+        "type": "wordpress-core",
+        "dist": {
+          "type": "zip",
+          "url": "https://github.com/WordPress/WordPress/archive/refs/tags/6.6.2.zip"
+        }
+      }
+    }
+  ],
+  "require": {
+    "wordpress/wordpress": "^6.6"
+  },
+  "scripts": {
+    "docker-up": [
+      "docker-compose up -d --force-recreate --remove-orphans"
+    ],
+    "docker-stop": [
+      "docker-compose stop"
+    ],
+    "docker-wipeout": [
+      "@docker-stop",
+      "docker rm wordpress-db",
+      "docker rm wordpress-web",
+      "@cleanup"
+    ],
+    "cleanup": [
+      "docker volume rm wordpress_db_data wordpress_wp_data --force"
+    ],
+    "xdebug-install": [
+      "docker exec -tu root wordpress-web bash -c 'pecl install xdebug'",
+      "docker exec -tu root wordpress-web bash -c 'echo \"zend_extension=xdebug\" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && echo \"[xdebug]\" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && echo \"xdebug.mode=debug\" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && echo \"xdebug.start_with_request=yes\" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && echo \"xdebug.discover_client_host=1\" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && echo \"xdebug.client_port=9003\" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'",
+      "docker exec -tu root wordpress-web bash -c 'service apache2 reload'"
+    ]
+  }
+}
