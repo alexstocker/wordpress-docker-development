@@ -3,7 +3,7 @@ Wordpress Docker development environment
 
 ## Features
 * xdebug
-* Wordpress Boilerplate plugin
+* [Wordpress Boilerplate plugin](https://wppb.me/)
 
 ## Requirements
 * composer
